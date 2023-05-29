@@ -1,7 +1,7 @@
 import streamlit as st
 
 from strokePred import rf,knn,svm
-from strokePred import X_test, Y_test
+from strokePred import x_test, y_test
 
 from sklearn.metrics import confusion_matrix, classification_report
 from mlxtend.plotting import plot_confusion_matrix
@@ -10,15 +10,15 @@ def main():
     st.title('Stroke előrejelző app')
 
     if st.button('Konfúziós mátrix megjelenítése'):
-        cm = confusion_matrix(Y_test, knn.predict(X_test))
+        cm = confusion_matrix(y_test, knn.predict(x_test))
         # Megjelenítés
         fig, ax = plot_confusion_matrix(conf_mat=cm)
         st.pyplot(fig)
 
     if st.button('Modellek összevetése'):
-        rf_accuracy = model.score(X_test, Y_test)
-        knn_accuracy = model2.score(X_test, Y_test)
-        svm_accuracy = model3.score(X_test, Y_test)
+        rf_accuracy = model.score(x_test, y_test)
+        knn_accuracy = model2.score(x_test, y_test)
+        svm_accuracy = model3.score(x_test, y_test)
         # Kiíratás
         st.write('RandomForest pontossága: {}%'.format(rf_accuracy*100))
         st.write('KNN pontossága:{}%'.format(knn_accuracy*100))
