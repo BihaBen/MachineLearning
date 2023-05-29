@@ -18,7 +18,7 @@ df=file.copy()
 #-------------------------------------------------------
 X=df.drop('stroke',axis=1).values
 Y=df['stroke'].values
-X_train, x_test, Y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=73)
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=73)
 #-------------------------------------------------------
 # Random Forest készítése: 100db fa behelyezés
 rf = RandomForestClassifier(n_estimators=100, random_state=42)
