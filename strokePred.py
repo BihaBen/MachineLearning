@@ -12,7 +12,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn import svm
 
 #-------------------------------------------------------
-file=pd.read_csv('Covid Data.csv')
+file=pd.read_csv('healthcare-dataset-stroke-data.csv')
 df=file.copy()
 
 #-------------------------------------------------------
