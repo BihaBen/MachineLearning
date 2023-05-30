@@ -100,14 +100,12 @@ df = df.loc[~((file['age'] < 10) & (df['smoking_status'] == 'smokes')) | ((df['a
 print("\nTörölt adatok száma:" + " " + str(old_rowN - len(df.index)))
 print("Maradt még:" + " " + str(len(df.index)))
 
-# Feature-ökre és labelekre felbontás
-X = df.iloc[:, :11] # 1.oszloptól 11.-ig és minden sor
-Y = df.iloc[:, 11] # 12. oszlop(eredmény) minden sora
-
 #------------------------------------------------------------------
 # TANÍTÁS
 #------------------------------------------------------------------
-
+# Feature-ökre és labelekre felbontás
+#X = df.iloc[:, :11] # 1.oszloptól 11.-ig és minden sor
+#Y = df.iloc[:, 11] # 12. oszlop(eredmény) minden sora
 X = df.drop(columns=['stroke'])
 Y= df['stroke'].values
 # X-> Feature Y-> Test
