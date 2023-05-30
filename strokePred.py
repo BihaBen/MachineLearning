@@ -12,7 +12,6 @@ from sklearn.metrics import *
 #KNN
 from sklearn.neighbors import KNeighborsClassifier
 #SVM
-from sklearn import svm
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 #Plot
