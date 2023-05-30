@@ -1,28 +1,63 @@
 import streamlit as st
 
-from strokePred import rf,knn,dtc
+from strokePred import rf,knn,dtc, svm
 from strokePred import x_test, y_test
 
-from sklearn.metrics import confusion_matrix, classification_report
-from mlxtend.plotting import plot_confusion_matrix
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.metrics import roc_curve, auc
+
+def add_bg_from_url():
+    st.markdown(
+         f"""
+         <style>
+         .stApp {{
+             background-image: url(https://png.pngtree.com/thumb_back/fh260/back_our/20190621/ourmid/pngtree-blue-artificial-intelligence-technology-ai-robot-banner-image_196890.jpg);
+             background-attachment: fixed;
+             background-size: cover
+         }}
+         </style>
+         """,
+         unsafe_allow_html=True
+     )
 
 def main():
-    st.title('Stroke előrejelző app')
+    button_pressed1 = st.sidebar.button('ROC görbe megjelenítése')
+    button_pressed2 = st.sidebar.button('Modellek összevetése')
+    st.title("STROKE ELŐREJELZŐ APP")
 
-    if st.button('Konfúziós mátrix megjelenítése'):
-        cm = confusion_matrix(y_test, knn.predict(x_test))
-        # Megjelenítés
-        fig, ax = plot_confusion_matrix(conf_mat=cm)
-        st.pyplot(fig)
+    if button_pressed1:
+        # Tesztadatok előrejelzése
+        y_pred = rf.predict_proba(x_test)[:, 1]  # Első oszlopban a pozitív osztály előrejelzéseinek valószínűségeit tároljuk
 
-    if st.button('Modellek összevetése'):
-        rf_accuracy = rf.score(x_test, y_test)
-        knn_accuracy = knn.score(x_test, y_test)
-        dtc_accuracy = dtc.score(x_test, y_test)
-        # Kiíratás
-        st.write('RandomForest pontossága: ', rf_accuracy) #{}%'.format(rf_accuracy*100))
-        st.write('KNN pontossága: ', knn_accuracy) #{}%'.format(knn_accuracy*100))
-        st.write('SVM pontossága: ', dtc_accuracy) #{}%'.format(dtc_accuracy*100))
+        # ROC görbe számítása
+        fpr, tpr, thresholds = roc_curve(y_test, y_pred)
+        roc_auc = auc(fpr, tpr)
+
+        # Streamlit alkalmazás
+        st.title("ROC görbe")
+        # ROC görbe megjelenítése
+        plt.figure(figsize=(8, 6))
+        plt.plot(fpr, tpr, color='blue', label='ROC görbe (AUC = %0.2f)' % roc_auc)
+        plt.plot([0, 1], [0, 1], color='red', linestyle='--')
+        plt.xlim([0.0, 1.0])
+        plt.ylim([0.0, 1.0])
+        plt.xlabel('True Positive arány')
+        plt.ylabel('False Positive arány')
+        plt.title('Receiver Operating Characteristic')
+        plt.legend(loc="lower right")
+        st.pyplot(plt)
+    if button_pressed2:
+        with st.sidebar:
+            rf_accuracy = rf.score(x_test, y_test)
+            knn_accuracy = knn.score(x_test, y_test)
+            svm_accuracy = svm.score(x_test, y_test)
+            # Kiíratás
+            st.write('RandomForest pontossága: {}%'.format(round((rf_accuracy*100),2)))
+            st.write('KNN pontossága: {}%'.format(round((knn_accuracy*100),2)))
+            st.write('SVM pontossága: {}%'.format(round((svm_accuracy*100),2)))
+       
 
 if __name__ == '__main__':
-    main()
+   main()
+   add_bg_from_url()
