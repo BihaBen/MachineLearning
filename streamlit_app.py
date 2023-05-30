@@ -16,9 +16,9 @@ def main():
         st.pyplot(fig)
 
     if st.button('Modellek összevetése'):
-        rf_accuracy = model.score(x_test, y_test)
-        knn_accuracy = model2.score(x_test, y_test)
-        dtc_accuracy = model3.score(x_test, y_test)
+        rf_accuracy = rf.score(x_test, y_test)
+        knn_accuracy = knn.score(x_test, y_test)
+        dtc_accuracy = dtc.score(x_test, y_test)
         # Kiíratás
         st.write('RandomForest pontossága: {}%'.format(rf_accuracy*100))
         st.write('KNN pontossága:{}%'.format(knn_accuracy*100))
