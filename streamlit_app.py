@@ -1,6 +1,6 @@
 import streamlit as st
 
-from strokePred import rf,knn,svm
+from strokePred import rf,knn,dtc
 from strokePred import x_test, y_test
 
 from sklearn.metrics import confusion_matrix, classification_report
@@ -18,11 +18,11 @@ def main():
     if st.button('Modellek összevetése'):
         rf_accuracy = model.score(x_test, y_test)
         knn_accuracy = model2.score(x_test, y_test)
-        svm_accuracy = model3.score(x_test, y_test)
+        dtc_accuracy = model3.score(x_test, y_test)
         # Kiíratás
         st.write('RandomForest pontossága: {}%'.format(rf_accuracy*100))
         st.write('KNN pontossága:{}%'.format(knn_accuracy*100))
-        st.write('SVM pontossága:{}%'.format(svm_accuracy*100))
+        st.write('SVM pontossága:{}%'.format(dtc_accuracy*100))
 
 if __name__ == '__main__':
     main()
