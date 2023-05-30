@@ -12,7 +12,7 @@ def add_bg_from_url():
          f"""
          <style>
          .stApp {{
-             background-image: url(https://png.pngtree.com/thumb_back/fh260/back_our/20190621/ourmid/pngtree-blue-artificial-intelligence-technology-ai-robot-banner-image_196890.jpg);
+             background-image: url(https://static.toiimg.com/photo/msid-87343087/87343087.jpg);
              background-attachment: fixed;
              background-size: cover
          }}
