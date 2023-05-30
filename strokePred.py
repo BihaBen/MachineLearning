@@ -165,20 +165,3 @@ accuracy = knn.score(x_test, y_test)
 # Pontosság kiírása
 print("Accuracy:", accuracy)
 
-#------------------------------------------------------------------
-# SVM
-#------------------------------------------------------------------
-
-# SVM modell illesztése
-# A modell lineáris határvonalakkal választja el az osztályokat
-# A C paraméter a szabályozási paraméter, amely befolyásolja az SVM modell kompromisszumát a túltanulás és az alultanulás között. Minél nagyobb a C, annál kevésbé tolerálja az SVM a hibákat a döntési határon.
-svm = SVC(kernel='linear', C=1.0)
-
-# Tanító adatokkal feltanítom a modelt
-svm.fit(X_train, Y_train)
-
-# Eredmények ellenőrzése
-accuracy = accuracy_score(y_test, svm.predict(x_test))
-
-# Pontosság kiírása
-print(f"Model accuracy: {accuracy}")
