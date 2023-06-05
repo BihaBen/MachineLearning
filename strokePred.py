@@ -116,8 +116,8 @@ XX_train, XX_test, yy_train, yy_test = train_test_split(XX, yy, test_size=0.4, r
 #--------------------------------------------------------------------------------------------------
 
 X = df.drop('stroke', axis=1)
-scaler = PowerTransformer()
-X = scaler.fit_transform(X)
+#scaler = PowerTransformer()
+#X = scaler.fit_transform(X)
 y= df['stroke'].values
 # X-> Feature Y-> Test
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
