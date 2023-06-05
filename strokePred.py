@@ -133,13 +133,13 @@ print(f'\nA y_train változóban {num_zeros} darab nulla és {num_ones} darab eg
 #------------------------------------------------------------------
 
 # Döntési fa osztályozó objectum készítése
-dtc = DecisionTreeClassifier(max_leaf_nodes= 25 , min_samples_split=3, min_samples_leaf=10)
+dtc1 = DecisionTreeClassifier(max_leaf_nodes= 25 , min_samples_split=3, min_samples_leaf=10)
 
 # Döntési fa feltanítása tanító adatokkal
-dtc.fit(X_train, y_train)
+dtc1.fit(X_train, y_train)
 
 # Előrejelzés a teszt adatokon
-y_pred = dtc.predict(X_test)
+y_pred = dtc1.predict(X_test)
 
 # Pontosság kiszámítása
 accuracy = accuracy_score(y_test, y_pred)
@@ -163,13 +163,13 @@ plt.show()
 #------------------------------------------------------------------
 
 # Döntési fa osztályozó objectum készítése
-#dtc = DecisionTreeClassifier(max_leaf_nodes= 25 , min_samples_split=3, min_samples_leaf=10)
+dtc2 = DecisionTreeClassifier(max_leaf_nodes= 25 , min_samples_split=3, min_samples_leaf=10)
 
 # Döntési fa feltanítása tanító adatokkal
-#dtc.fit(X_train, y_train)
+dtc2.fit(X_train, y_train)
 
 # Előrejelzés a teszt adatokon
-yy_pred = dtc.predict(XX_test)
+yy_pred = dtc2.predict(XX_test)
 
 # Pontosság kiszámítása
 accuracy = accuracy_score(yy_test, yy_pred)
@@ -193,13 +193,13 @@ plt.show()
 #------------------------------------------------------------------
 
 # Döntési fa osztályozó objectum készítése
-#dtc = DecisionTreeClassifier(max_leaf_nodes= 25 , min_samples_split=3, min_samples_leaf=10)
+dtc3 = DecisionTreeClassifier(max_leaf_nodes= 25 , min_samples_split=3, min_samples_leaf=10)
 
 # Döntési fa feltanítása tanító adatokkal
-dtc.fit(XX_train, yy_train)
+dtc3.fit(XX_train, yy_train)
 
 # Előrejelzés a teszt adatokon
-yy_pred = dtc.predict(XX_test)
+yy_pred = dtc3.predict(XX_test)
 
 # Pontosság kiszámítása
 accuracy = accuracy_score(yy_test, yy_pred)
@@ -221,13 +221,13 @@ plt.show()
 # RANDOM FOREST (Kis adattal tanítás kis adattal tesztelés)
 #------------------------------------------------------------------
 # Random Forest inicializálása
-rf = RandomForestClassifier(n_estimators=100, random_state=40, max_depth=2, min_samples_split=30, min_samples_leaf=15)
+rf1 = RandomForestClassifier(n_estimators=100, random_state=40, max_depth=2, min_samples_split=30, min_samples_leaf=15)
 
 # Tanítás
-rf.fit(X_train, y_train)
+rf1.fit(X_train, y_train)
 
 # Előrejelzés a teszt adatokon
-y_pred = rf.predict(X_test)
+y_pred = rf1.predict(X_test)
 
 # Pontosság kiszámítása
 accuracy = accuracy_score(y_test, y_pred)
@@ -250,13 +250,13 @@ plt.show()
 # RANDOM FOREST (Kis adattal tanítás nagy adattal tesztelés)
 #------------------------------------------------------------------
 # Random Forest inicializálása
-#rf = RandomForestClassifier(n_estimators=100, random_state=40, max_depth=2, min_samples_split=30, min_samples_leaf=15)
+rf2 = RandomForestClassifier(n_estimators=100, random_state=40, max_depth=2, min_samples_split=30, min_samples_leaf=15)
 
 # Tanítás
-rf.fit(X_train, y_train)
+rf2.fit(X_train, y_train)
 
 # Előrejelzés a teszt adatokon
-yy_pred = rf.predict(XX_test)
+yy_pred = rf2.predict(XX_test)
 
 # Pontosság kiszámítása
 accuracy = accuracy_score(yy_test, yy_pred)
@@ -279,13 +279,13 @@ plt.show()
 # RANDOM FOREST (Nagy adattal tanítás nagy adattal tesztelés)
 #------------------------------------------------------------------
 # Random Forest inicializálása
-#rf = RandomForestClassifier(n_estimators=100, random_state=40, max_depth=2, min_samples_split=30, min_samples_leaf=15)
+rf3 = RandomForestClassifier(n_estimators=100, random_state=40, max_depth=2, min_samples_split=30, min_samples_leaf=15)
 
 # Tanítás
-rf.fit(XX_train, yy_train)
+rf3.fit(XX_train, yy_train)
 
 # Előrejelzés a teszt adatokon
-yy_pred = rf.predict(XX_test)
+yy_pred = rf3.predict(XX_test)
 
 # Pontosság kiszámítása
 accuracy = accuracy_score(yy_test, yy_pred)
@@ -309,12 +309,12 @@ plt.show()
 #------------------------------------------------------------------
 
 # KNN osztályozó készítése 5 megengedett szomszéddal
-knn = KNeighborsClassifier(n_neighbors=13)
+knn1 = KNeighborsClassifier(n_neighbors=13)
 
 # Tanító adatokkal feltanítom a modelt
-knn.fit(X_train, y_train)
+knn1.fit(X_train, y_train)
 # Előrejelzés a teszt adatokon
-y_pred = knn.predict(X_test)
+y_pred = knn1.predict(X_test)
 
 # Pontosság kiszámítása
 accuracy = accuracy_score(y_test, y_pred)
@@ -338,12 +338,12 @@ plt.show()
 #------------------------------------------------------------------
 
 # KNN osztályozó készítése 5 megengedett szomszéddal
-#knn = KNeighborsClassifier(n_neighbors=13)
+knn2 = KNeighborsClassifier(n_neighbors=13)
 
 # Tanító adatokkal feltanítom a modelt
-knn.fit(X_train, y_train)
+knn2.fit(X_train, y_train)
 # Előrejelzés a teszt adatokon
-yy_pred = knn.predict(XX_test)
+yy_pred = knn2.predict(XX_test)
 
 # Pontosság kiszámítása
 accuracy = accuracy_score(yy_test, yy_pred)
@@ -367,12 +367,12 @@ plt.show()
 #------------------------------------------------------------------
 
 # KNN osztályozó készítése 5 megengedett szomszéddal
-#knn = KNeighborsClassifier(n_neighbors=13)
+knn3 = KNeighborsClassifier(n_neighbors=13)
 
 # Tanító adatokkal feltanítom a modelt
-knn.fit(XX_train, yy_train)
+knn3.fit(XX_train, yy_train)
 # Előrejelzés a teszt adatokon
-yy_pred = knn.predict(XX_test)
+yy_pred = knn3.predict(XX_test)
 
 # Pontosság kiszámítása
 accuracy = accuracy_score(yy_test, yy_pred)
@@ -399,11 +399,11 @@ plt.show()
 # SVM modell illesztése
 # A modell lineáris határvonalakkal választja el az osztályokat
 # A C paraméter a szabályozási paraméter, amely befolyásolja az SVM modell kompromisszumát a túltanulás és az alultanulás között. Minél nagyobb a C, annál kevésbé tolerálja az SVM a hibákat a döntési határon.
-svm = SVC(kernel='linear', C=1.0)
+svm1 = SVC(kernel='linear', C=1.0)
 
 # Tanító adatokkal feltanítom a modelt
-svm.fit(X_train, y_train)
-y_pred = svm.predict(X_test)
+svm1.fit(X_train, y_train)
+y_pred = svm1.predict(X_test)
 
 # Pontosság kiszámítása
 accuracy = accuracy_score(y_test, y_pred)
@@ -430,11 +430,11 @@ plt.show()
 # SVM modell illesztése
 # A modell lineáris határvonalakkal választja el az osztályokat
 # A C paraméter a szabályozási paraméter, amely befolyásolja az SVM modell kompromisszumát a túltanulás és az alultanulás között. Minél nagyobb a C, annál kevésbé tolerálja az SVM a hibákat a döntési határon.
-#svm = SVC(kernel='linear', C=1.0)
+svm2 = SVC(kernel='linear', C=1.0)
 
 # Tanító adatokkal feltanítom a modelt
-svm.fit(X_train, y_train)
-yy_pred = svm.predict(XX_test)
+svm2.fit(X_train, y_train)
+yy_pred = svm2.predict(XX_test)
 
 # Pontosság kiszámítása
 accuracy = accuracy_score(yy_test, yy_pred)
@@ -461,11 +461,11 @@ plt.show()
 # SVM modell illesztése
 # A modell lineáris határvonalakkal választja el az osztályokat
 # A C paraméter a szabályozási paraméter, amely befolyásolja az SVM modell kompromisszumát a túltanulás és az alultanulás között. Minél nagyobb a C, annál kevésbé tolerálja az SVM a hibákat a döntési határon.
-#svm = SVC(kernel='linear', C=1.0)
+svm3 = SVC(kernel='linear', C=1.0)
 
 # Tanító adatokkal feltanítom a modelt
-svm.fit(XX_train, yy_train)
-yy_pred = svm.predict(XX_test)
+svm3.fit(XX_train, yy_train)
+yy_pred = svm3.predict(XX_test)
 
 # Pontosság kiszámítása
 accuracy = accuracy_score(yy_test, yy_pred)
