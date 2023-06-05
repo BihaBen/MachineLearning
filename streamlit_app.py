@@ -37,15 +37,6 @@ def main():
         # Confusion matrix megjelenítése
         fig, ax = plot_confusion_matrix(conf_mat=cm)
         st.pyplot(fig)
-
-        recall = recall_score(y_test, model.predict(X_test), pos_label=1)
-        precision = precision_score(y_test, model.predict(X_test), pos_label=1)
-        f1 = f1_score(y_test, model.predict(X_test), pos_label=1)
-        accuracy = model.score(X_test, y_test)
-        st.write('RandomForest accuracy:', accuracy)
-        st.write('RandomForest recall:', recall)
-        st.write('RandomForest precision:', precision)
-        st.write('RandomForest F1 score:', f1)
         
     if button_pressed2:
         with st.sidebar:
