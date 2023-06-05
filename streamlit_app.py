@@ -40,7 +40,7 @@ def main():
         # Confusion matrix megjelenítése
         fig, ax = plot_confusion_matrix(conf_mat=cm)
         
-        ax.set(title='Random forest konfutios matrix szemleltetes:', ylabel='Valós osztály', xlabel='Előrejelzett osztály')
+        ax.set(title='Random forest konfuzios matrix szemleltetes:', ylabel='Valós osztály', xlabel='Előrejelzett osztály')
         
         st.pyplot(fig)
         
