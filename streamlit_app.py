@@ -41,9 +41,8 @@ def main():
         
     if button_pressed2:
         with st.sidebar:
-            
            y_pred_rf = dtc.predict(X_test)
-            st.write(rf.accuracy_score(X_test, y_pred_dtc))
+           st.write(rf.accuracy_score(X_test, y_pred_dtc))
             
        
 
