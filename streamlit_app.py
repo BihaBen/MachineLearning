@@ -41,13 +41,13 @@ def main():
         st.pyplot(fig)
         
         recall = recall_score(y_test, y_predict_rf_matrix, pos_label=1)
-        precision = precision_score(y_test, y_predict_rf_matrix, pos_label=1)
-        f1 = f1_score(y_test, y_predict_rf_matrix, pos_label=1)
+        #precision = precision_score(y_test, y_predict_rf_matrix, pos_label=1)
+        #f1 = f1_score(y_test, y_predict_rf_matrix, pos_label=1)
         accuracy = rf1.score(y_test, y_predict_rf_matrix)
         st.write('RandomForest accuracy:', accuracy)
         st.write('RandomForest recall:', recall)
-        st.write('RandomForest precision:', precision)
-        st.write('RandomForest F1 score:', f1)
+        #st.write('RandomForest precision:', precision)
+        #st.write('RandomForest F1 score:', f1)
         
     if button_pressed2:
         with st.sidebar:
