@@ -44,7 +44,7 @@ def main():
         
         st.pyplot(fig)
         # Kép importálása és megjelenítése
-        image = Image.open("metrics.jpg")
+        image = Image.open("metrics.png")
         st.image(image)
         
     if button_pressed2:
