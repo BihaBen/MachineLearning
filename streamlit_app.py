@@ -11,6 +11,7 @@ from mlxtend.plotting import plot_confusion_matrix
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import recall_score
 from sklearn.metrics import f1_score
+from sklearn.metrics import precision_score
 
 def add_bg_from_url():
     st.markdown(
