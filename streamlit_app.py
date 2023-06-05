@@ -26,7 +26,7 @@ def add_bg_from_url():
      )
 
 def main():
-    button_pressed1 = st.sidebar.button('ROC görbe megjelenítése')
+    button_pressed1 = st.sidebar.button('Konfuzios matrix megjelenítése')
     button_pressed2 = st.sidebar.button('Modellek összevetése')
     st.title("STROKE ELŐREJELZŐ APP")
 
@@ -63,24 +63,14 @@ def main():
             f1_svm = svm.f1_score(X_test, y_pred_svm)
            
             # Kiíratás
-            st.write('ACCURACY <br>')
+            st.write('ACCURACY')
             st.write('RandomForest pontossága: {}%'.format(round((accuracy_dtc*100),2)))
             st.write('RandomForest pontossága: {}%'.format(round((accuracy_rf*100),2)))
             st.write('KNN pontossága: {}%'.format(round((accuracy_knn*100),2)))
             st.write('SVM pontossága: {}%'.format(round((accuracy_svm*100),2)))
             
             
-            st.write('<br>RECALL')
-            st.write('RandomForest pontossága: {}%'.format(round((Recall_dtc*100),2)))
-            st.write('RandomForest pontossága: {}%'.format(round((Recall_rf*100),2)))
-            st.write('KNN pontossága: {}%'.format(round((Recall_knn*100),2)))
-            st.write('SVM pontossága: {}%'.format(round((Recall_svm*100),2)))
             
-            st.write('<br>F1')
-            st.write('RandomForest pontossága: {}%'.format(round((f1_dtc*100),2)))
-            st.write('RandomForest pontossága: {}%'.format(round((f1_rf*100),2)))
-            st.write('KNN pontossága: {}%'.format(round((f1_knn*100),2)))
-            st.write('SVM pontossága: {}%'.format(round((f1_svm*100),2)))
        
 
 if __name__ == '__main__':
