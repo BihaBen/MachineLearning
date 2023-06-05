@@ -32,7 +32,8 @@ def main():
     st.title("STROKE ELŐREJELZŐ APP")
     
     if button_pressed1:
-        cm = confusion_matrix(y_test, rf.predict(X_test))
+        y_predict_knn_matrix = rf.predict(X_test)
+        cm = confusion_matrix(y_test, y_predict_knn_matrix)
 
         # Confusion matrix megjelenítése
         fig, ax = plot_confusion_matrix(conf_mat=cm)
