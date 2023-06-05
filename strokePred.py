@@ -163,7 +163,7 @@ plt.show()
 #------------------------------------------------------------------
 
 # Döntési fa osztályozó objectum készítése
-dtc = DecisionTreeClassifier(max_leaf_nodes= 25 , min_samples_split=3, min_samples_leaf=10)
+#dtc = DecisionTreeClassifier(max_leaf_nodes= 25 , min_samples_split=3, min_samples_leaf=10)
 
 # Döntési fa feltanítása tanító adatokkal
 dtc.fit(X_train, y_train)
@@ -193,7 +193,7 @@ plt.show()
 #------------------------------------------------------------------
 
 # Döntési fa osztályozó objectum készítése
-dtc = DecisionTreeClassifier(max_leaf_nodes= 25 , min_samples_split=3, min_samples_leaf=10)
+#dtc = DecisionTreeClassifier(max_leaf_nodes= 25 , min_samples_split=3, min_samples_leaf=10)
 
 # Döntési fa feltanítása tanító adatokkal
 dtc.fit(XX_train, yy_train)
@@ -250,7 +250,7 @@ plt.show()
 # RANDOM FOREST (Kis adattal tanítás nagy adattal tesztelés)
 #------------------------------------------------------------------
 # Random Forest inicializálása
-rf = RandomForestClassifier(n_estimators=100, random_state=40, max_depth=2, min_samples_split=30, min_samples_leaf=15)
+#rf = RandomForestClassifier(n_estimators=100, random_state=40, max_depth=2, min_samples_split=30, min_samples_leaf=15)
 
 # Tanítás
 rf.fit(X_train, y_train)
@@ -279,7 +279,7 @@ plt.show()
 # RANDOM FOREST (Nagy adattal tanítás nagy adattal tesztelés)
 #------------------------------------------------------------------
 # Random Forest inicializálása
-rf = RandomForestClassifier(n_estimators=100, random_state=40, max_depth=2, min_samples_split=30, min_samples_leaf=15)
+#rf = RandomForestClassifier(n_estimators=100, random_state=40, max_depth=2, min_samples_split=30, min_samples_leaf=15)
 
 # Tanítás
 rf.fit(XX_train, yy_train)
@@ -338,7 +338,7 @@ plt.show()
 #------------------------------------------------------------------
 
 # KNN osztályozó készítése 5 megengedett szomszéddal
-knn = KNeighborsClassifier(n_neighbors=13)
+#knn = KNeighborsClassifier(n_neighbors=13)
 
 # Tanító adatokkal feltanítom a modelt
 knn.fit(X_train, y_train)
@@ -367,7 +367,7 @@ plt.show()
 #------------------------------------------------------------------
 
 # KNN osztályozó készítése 5 megengedett szomszéddal
-knn = KNeighborsClassifier(n_neighbors=13)
+#knn = KNeighborsClassifier(n_neighbors=13)
 
 # Tanító adatokkal feltanítom a modelt
 knn.fit(XX_train, yy_train)
@@ -430,7 +430,7 @@ plt.show()
 # SVM modell illesztése
 # A modell lineáris határvonalakkal választja el az osztályokat
 # A C paraméter a szabályozási paraméter, amely befolyásolja az SVM modell kompromisszumát a túltanulás és az alultanulás között. Minél nagyobb a C, annál kevésbé tolerálja az SVM a hibákat a döntési határon.
-svm = SVC(kernel='linear', C=1.0)
+#svm = SVC(kernel='linear', C=1.0)
 
 # Tanító adatokkal feltanítom a modelt
 svm.fit(X_train, y_train)
@@ -461,7 +461,7 @@ plt.show()
 # SVM modell illesztése
 # A modell lineáris határvonalakkal választja el az osztályokat
 # A C paraméter a szabályozási paraméter, amely befolyásolja az SVM modell kompromisszumát a túltanulás és az alultanulás között. Minél nagyobb a C, annál kevésbé tolerálja az SVM a hibákat a döntési határon.
-svm = SVC(kernel='linear', C=1.0)
+#svm = SVC(kernel='linear', C=1.0)
 
 # Tanító adatokkal feltanítom a modelt
 svm.fit(XX_train, yy_train)
