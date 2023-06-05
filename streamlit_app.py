@@ -1,6 +1,6 @@
 import streamlit as st
 
-from strokePred import dtc, rf, knn, svm
+from strokePred import dtc1, rf1, knn1, svm1
 from strokePred import X_test, y_test
 import numpy as np
 import matplotlib.pyplot as plt
@@ -32,8 +32,8 @@ def main():
     st.title("STROKE ELŐREJELZŐ APP")
     
     if button_pressed1:
-        y_predict_knn_matrix = rf.predict(X_test)
-        cm = confusion_matrix(y_test, y_predict_knn_matrix)
+        y_predict_rf_matrix = rf1.predict(X_test)
+        cm = confusion_matrix(y_test, y_predict_rf_matrix)
 
         # Confusion matrix megjelenítése
         fig, ax = plot_confusion_matrix(conf_mat=cm)
