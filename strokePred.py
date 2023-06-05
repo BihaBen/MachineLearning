@@ -109,8 +109,8 @@ print('\n\nTANÍTÁS EREDMÉNYEI:')
 
 #-----------------------------Nagy dataFrame felosztás (teszthez)-----------------------------------
 XX = df_old.drop('stroke', axis=1)
-scaler = PowerTransformer()
-XX = scaler.fit_transform(XX)
+#scaler = PowerTransformer()
+#XX = scaler.fit_transform(XX)
 yy= df_old['stroke'].values
 XX_train, XX_test, yy_train, yy_test = train_test_split(XX, yy, test_size=0.4, random_state=42)
 #--------------------------------------------------------------------------------------------------
