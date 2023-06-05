@@ -30,7 +30,7 @@ def add_bg_from_url():
 def main():
     button_pressed1 = st.sidebar.button('Konfuzios matrix megjelenítése')
     button_pressed2 = st.sidebar.button('Modellek összevetése')
-    st.title("'<style>body {color: white;}</style>'STROKE ELŐREJELZŐ APP")
+    st.title("<style>body {color: white;}</style>STROKE ELŐREJELZŐ APP")
     
     if button_pressed1:
         y_predict_rf_matrix = rf1.predict(X_test)
