@@ -44,51 +44,56 @@ def main():
         
         st.pyplot(fig)
         
-        #st.write('RandomForest pontossága: {}%'.format(round((accuracy_dtc*100),2)))
-        #st.write('RandomForest pontossága: {}%'.format(round((accuracy_dtc*100),2)))
-        #st.write('RandomForest pontossága: {}%'.format(round((accuracy_dtc*100),2)))
-        #st.write('RandomForest pontossága: {}%'.format(round((accuracy_dtc*100),2)))
-        
     if button_pressed2:
         with st.sidebar:
-            y_pred_dtc = dtc1.predict(X_test)
-            y_pred_rf = rf1.predict(X_test)
-            y_pred_knn = knn1.predict(X_test)
-            y_pred_svm = svm1.predict(X_test)
-            
-            accuracy_dtc = dtc1.accuracy_score(X_test, y_pred_dtc)
-            accuracy_rf = rf1.accuracy_score(X_test, y_pred_rf)
-            accuracy_knn = knn1.accuracy_score(X_test, y_pred_knn)
-            accuracy_svm = svm1.accuracy_score(X_test, y_pred_svm)
-            
-            Recall_dtc = dtc1.recall_score(X_test, y_pred_dtc)
-            Recall_rf = rf1.recall_score(X_test, y_pred_rf)
-            Recall_knn = knn1.recall_score(X_test, y_pred_knn)
-            Recall_svm = svm1.recall_score(X_test, y_pred_svm)
-            
-            f1_dtc = dtc1.f1_score(X_test, y_pred_dtc)
-            f1_rf = rf1.f1_score(X_test, y_pred_rf)
-            f1_knn = knn1.f1_score(X_test, y_pred_knn)
-            f1_svm = svm1.f1_score(X_test, y_pred_svm)
-           
-            # Kiíratás
-            st.write('ACCURACY')
-            st.write('RandomForest pontossága: {}%'.format(round((accuracy_dtc*100),2)))
-            st.write('RandomForest pontossága: {}%'.format(round((accuracy_rf*100),2)))
-            st.write('KNN pontossága: {}%'.format(round((accuracy_knn*100),2)))
-            st.write('SVM pontossága: {}%'.format(round((accuracy_svm*100),2)))
-            
-            st.write('<br>RECALL')
-            st.write('RandomForest pontossága: {}%'.format(round((Recall_dtc*100),2)))
-            st.write('RandomForest pontossága: {}%'.format(round((Recall_rf*100),2)))
-            st.write('KNN pontossága: {}%'.format(round((Recall_knn*100),2)))
-            st.write('SVM pontossága: {}%'.format(round((Recall_svm*100),2)))
-            
-            st.write('<br>F1')
-            st.write('RandomForest pontossága: {}%'.format(round((f1_dtc*100),2)))
-            st.write('RandomForest pontossága: {}%'.format(round((f1_rf*100),2)))
-            st.write('KNN pontossága: {}%'.format(round((f1_knn*100),2)))
-            st.write('SVM pontossága: {}%'.format(round((f1_svm*100),2)))
+           y_predict_dtc = dtc1.predict(X_test)
+    y_predict_rf = rf1.predict(X_test)
+    y_predict_knn = knn1.predict(X_test)
+    y_predict_svm = svm1.predict(X_test)
+
+    accuracy_dtc = accuracy_score(y_test, y_predict_dtc)
+    accuracy_rf = accuracy_score(y_test, y_predict_rf)
+    accuracy_knn = accuracy_score(y_test, y_predict_knn)
+    accuracy_svm = accuracy_score(y_test, y_predict_svm)
+
+    recall_dtc = recall_score(y_test, y_predict_dtc)
+    recall_rf = recall_score(y_test, y_predict_rf)
+    recall_knn = recall_score(y_test, y_predict_knn)
+    recall_svm = recall_score(y_test, y_predict_svm)
+
+    precision_dtc = precision_score(y_test, y_predict_dtc)
+    precision_rf = precision_score(y_test, y_predict_rf)
+    precision_knn = precision_score(y_test, y_predict_knn)
+    precision_svm = precision_score(y_test, y_predict_svm)
+
+    f1_dtc = f1_score(y_test, y_predict_dtc)
+    f1_rf = f1_score(y_test, y_predict_rf)
+    f1_knn = f1_score(y_test, y_predict_knn)
+    f1_svm = f1_score(y_test, y_predict_svm)
+
+    st.write("Decision Tree:")
+    st.write("Accuracy:", accuracy_dtc)
+    st.write("Recall:", recall_dtc)
+    st.write("Precision:", precision_dtc)
+    st.write("F1 Score:", f1_dtc)
+
+    st.write("Random Forest:")
+    st.write("Accuracy:", accuracy_rf)
+    st.write("Recall:", recall_rf)
+    st.write("Precision:", precision_rf)
+    st.write("F1 Score:", f1_rf)
+
+    st.write("KNN:")
+    st.write("Accuracy:", accuracy_knn)
+    st.write("Recall:", recall_knn)
+    st.write("Precision:", precision_knn)
+    st.write("F1 Score:", f1_knn)
+
+    st.write("SVM:")
+    st.write("Accuracy:", accuracy_svm)
+    st.write("Recall:", recall_svm)
+    st.write("Precision:", precision_svm)
+    st.write("F1 Score:", f1_svm)
             
        
 
