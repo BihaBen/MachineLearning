@@ -39,6 +39,15 @@ def main():
         fig, ax = plot_confusion_matrix(conf_mat=cm)
         st.pyplot(fig)
         
+        recall = recall_score(y_test, rf1.predict(X_test), pos_label=1)
+        precision = precision_score(y_test, rf1.predict(X_test), pos_label=1)
+        f1 = f1_score(y_test, rf1.predict(X_test), pos_label=1)
+        accuracy = rf1.score(X_test, y_test)
+        st.write('RandomForest accuracy:', accuracy)
+        st.write('RandomForest recall:', recall)
+        st.write('RandomForest precision:', precision)
+        st.write('RandomForest F1 score:', f1)
+        
     if button_pressed2:
         with st.sidebar:
             y_pred_dtc = dtc1.predict(X_test)
