@@ -43,9 +43,17 @@ def main():
         ax.set(title='Random forest konfutios matrix szemleltetes:', ylabel='Valós osztály', xlabel='Előrejelzett osztály')
         
         st.pyplot(fig)
-        # Kép importálása és megjelenítése
-        image = url("https://github.com/BihaBen/MachineLearning/blob/main/metrics.png")
-        st.image(image)
+        
+        
+        st.markdown("<h3>Accuracy:</h3>")
+        st.write("(TN + TP) / (TN + FP + TP + FN)")
+        st.markdown("<h3>Precision:</h3>")
+        st.write("(TP) / (FP + TP)")
+        st.markdown("<h3>Recall:</h3>")
+        st.write("(TP) / (TP + FN)")
+        st.markdown("<h3>F1 score:</h3>")
+        st.write("(TN + TP) / (TN + FP + TP + FN)")
+
         
     if button_pressed2:
         with st.sidebar:
