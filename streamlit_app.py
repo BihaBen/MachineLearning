@@ -47,20 +47,7 @@ def main():
             y_pred_knn = dtc.predict(X_test)
             y_pred_svm = dtc.predict(X_test)
             
-            accuracy_dtc = rf.accuracy_score(X_test, y_pred_dtc)
-            accuracy_rf = rf.accuracy_score(X_test, y_pred_rf)
-            accuracy_knn = knn.accuracy_score(X_test, y_pred_knn)
-            accuracy_svm = svm.accuracy_score(X_test, y_pred_svm)
-            
-            Recall_dtc = rf.recall_score(X_test, y_pred_dtc)
-            Recall_rf = rf.recall_score(X_test, y_pred_rf)
-            Recall_knn = knn.recall_score(X_test, y_pred_knn)
-            Recall_svm = svm.recall_score(X_test, y_pred_svm)
-            
-            f1_dtc = rf.f1_score(X_test, y_pred_dtc)
-            f1_rf = rf.f1_score(X_test, y_pred_rf)
-            f1_knn = knn.f1_score(X_test, y_pred_knn)
-            f1_svm = svm.f1_score(X_test, y_pred_svm)
+           
            
             # Kiíratás
             st.write('ACCURACY')
