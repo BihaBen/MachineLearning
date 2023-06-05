@@ -4,7 +4,8 @@ from strokePred import dtc, rf, knn, svm
 from strokePred import X_test, y_test
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.metrics import roc_curve, auc
+from sklearn.metrics import confusion_matrix, classification_report
+
 #Metrikák
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import recall_score
@@ -32,24 +33,12 @@ def main():
     if button_pressed1:
         # Tesztadatok előrejelzése
         y_pred = rf.predict(X_test)  # Első oszlopban a pozitív osztály előrejelzéseinek valószínűségeit tároljuk
-
-        # ROC görbe számítása
-        fpr, tpr, thresholds = roc_curve(y_test, y_pred)
-        roc_auc = auc(fpr, tpr)
-
-        # Streamlit alkalmazás
-        st.title("ROC görbe")
-        # ROC görbe megjelenítése
-        plt.figure(figsize=(8, 6))
-        plt.plot(fpr, tpr, color='blue', label='ROC görbe (AUC = %0.2f)' % roc_auc)
-        plt.plot([0, 1], [0, 1], color='red', linestyle='--')
-        plt.xlim([0.0, 1.0])
-        plt.ylim([0.0, 1.0])
-        plt.xlabel('True Positive arány')
-        plt.ylabel('False Positive arány')
-        plt.title('Receiver Operating Characteristic')
-        plt.legend(loc="lower right")
-        st.pyplot(plt)
+        # Konfúziós mátrix létrehozása
+        cm = confusion_matrix(y_test, y_pred)
+        # Konfúziós mátrix megjelenítése
+        fig, ax = plot_confusion_matrix(conf_mat=cm)
+        st.pyplot(fig)
+        
     if button_pressed2:
         with st.sidebar:
             
