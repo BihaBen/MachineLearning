@@ -166,7 +166,7 @@ plt.show()
 #dtc = DecisionTreeClassifier(max_leaf_nodes= 25 , min_samples_split=3, min_samples_leaf=10)
 
 # Döntési fa feltanítása tanító adatokkal
-dtc.fit(X_train, y_train)
+#dtc.fit(X_train, y_train)
 
 # Előrejelzés a teszt adatokon
 yy_pred = dtc.predict(XX_test)
