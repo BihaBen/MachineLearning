@@ -45,17 +45,17 @@ def main():
         st.pyplot(fig)
         
         
-        st.markdown('<h2 style="background-color: white;">Accuracy:</h2>', unsafe_allow_html=True)
-        st.write('<h3 style="background-color: white;">(TN + TP) / (TN + FP + TP + FN)</h3>', unsafe_allow_html=True)
+        st.markdown('<h2 style="background-color: white;text-align: center;">Accuracy:</h2>', unsafe_allow_html=True)
+        st.write('<h3 style="background-color: white;text-align: center;">(TN + TP) / (TN + FP + TP + FN)</h3>', unsafe_allow_html=True)
         
-        st.markdown('<h2 style="background-color: white;">Precision:</h2>', unsafe_allow_html=True)
-        st.write('<h3 style="background-color: white;">(TP) / (FP + TP)</h3>', unsafe_allow_html=True)
+        st.markdown('<h2 style="background-color: white;text-align: center;">Precision:</h2>', unsafe_allow_html=True)
+        st.write('<h3 style="background-color: white;text-align: center;">(TP) / (FP + TP)</h3>', unsafe_allow_html=True)
         
-        st.markdown('<h2 style="background-color: white;">Recall:</h2>', unsafe_allow_html=True)
-        st.write('<h3 style="background-color: white;">(TP) / (TP + FN):</h3>', unsafe_allow_html=True)
+        st.markdown('<h2 style="background-color: white;text-align: center;">Recall:</h2>', unsafe_allow_html=True)
+        st.write('<h3 style="background-color: white;text-align: center;">(TP) / (TP + FN):</h3>', unsafe_allow_html=True)
         
-        st.markdown('<h2 style="background-color: white;">F1 score:</h2>', unsafe_allow_html=True)
-        st.write('<h3 style="background-color: white;">(PRECISION * RECALL) / (PRECISION + RECALL)</h3>', unsafe_allow_html=True)
+        st.markdown('<h2 style="background-color: white;text-align: center;">F1 score:</h2>', unsafe_allow_html=True)
+        st.write('<h3 style="background-color: white;text-align: center;">(PRECISION * RECALL) / (PRECISION + RECALL)</h3>', unsafe_allow_html=True)
 
         
     if button_pressed2:
