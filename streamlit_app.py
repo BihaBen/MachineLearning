@@ -42,21 +42,8 @@ def main():
     if button_pressed2:
         with st.sidebar:
             
-            y_pred_dtc = dtc.predict(X_test)
-            y_pred_rf = dtc.predict(X_test)
-            y_pred_knn = dtc.predict(X_test)
-            y_pred_svm = dtc.predict(X_test)
-            
            
-           
-            # Kiíratás
-            st.write('ACCURACY')
-            st.write('RandomForest pontossága: {}%'.format(round((accuracy_dtc*100),2)))
-            st.write('RandomForest pontossága: {}%'.format(round((accuracy_rf*100),2)))
-            st.write('KNN pontossága: {}%'.format(round((accuracy_knn*100),2)))
-            st.write('SVM pontossága: {}%'.format(round((accuracy_svm*100),2)))
-            
-            
+            st.write('ok')
             
        
 
