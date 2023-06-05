@@ -1,174 +1,400 @@
 #import
 import pandas as pd
 import numpy as np
-
-#Döntési fa
+# Tanítás
+from sklearn.model_selection import train_test_split, GridSearchCV
+# Döntési fa
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.model_selection import train_test_split
-#Random forest
+# Random forest
 from sklearn.ensemble import RandomForestClassifier, VotingClassifier
 from sklearn.datasets import make_classification
-from sklearn.metrics import *
-#KNN
+# KNN
 from sklearn.neighbors import KNeighborsClassifier
-#SVM
+# SVM
 from sklearn.svm import SVC
-from sklearn.metrics import accuracy_score
 #Plot
 import matplotlib.pyplot as plt
-from sklearn.metrics import confusion_matrix
+#Metrikák
 from sklearn.metrics import accuracy_score
-
+from sklearn.metrics import recall_score
+from sklearn.metrics import f1_score
+#Adatnormalizalas
+from sklearn.preprocessing import PowerTransformer 
+#Konfuzios matrix
+from sklearn.metrics import confusion_matrix
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 #A csv tartalmának pandas dataframe-be olvasása
 file = pd.read_csv('healthcare-dataset-stroke-data.csv')
 df = file
+df.head
 
 #------------------------------------------------------------------
 #TESZT
 #------------------------------------------------------------------
-# Beolvasás tesztelése
-print("\nAz adatok sorinak száma:" + " " + str(len(df.index)))
-print("Legnagyobb életkor")
-print((df["age"].max()))
-print("Legkissebb életkor (létezik pár hetes baba)")
-print((df["age"].min()))
-print("Átlagos életkor")
-print((df["age"].mean()))
-
-print("\nLegnagyobb BMI")
-print((df["bmi"].max()))
-print("Legkissebb BMI")
-print((df["bmi"].min()))
-print("Átlagos BMI")
-print((df["bmi"].mean()))
-
-print("\nLegnagyobb cukorszint")
-print((df["avg_glucose_level"].max()))
-print("Legkissebb cukorszint")
-print((df["avg_glucose_level"].min()))
-print("Átlagos cukorszint")
-print((df["avg_glucose_level"].mean()))
+print('TESZTELÉS EREDMÉNYEI:')
+print(f'\nAz adatok mennyisége = {df.shape}')
+print(f'\nTöbbször előforduló adat = {df.duplicated().sum()}')
+print(f'\nTisztítás előtti üres cellák oszloponként:\n {df.isnull().sum()}')
+print(f'\nOszlop statisztika szemléltetése:')
+print(f' {round(df.describe(),2)}')
+print(f'\nElőforduló nemek:{df.gender.unique()}\n')
+num_zeros = sum(df['stroke'] == 0)
+num_ones = sum(df['stroke'] == 1)
+# Eredmények kiírása
+print(f"A y_train változóban {num_zeros} darab nulla és {num_ones} darab egyes érték van.")
 
 #------------------------------------------------------------------
 # TISZTÍTÁS
 #------------------------------------------------------------------
-# Minden életkor legyen float
-df['age'] = df[["age"]].fillna(0).astype(float) # Létezik integer és float típusú 
+print('\nTISZTÍTÁS EREDMÉNYEI:')
 
-# NULL tipusok cserélése Numpy tipusu NULL-ra
-df.replace('Nan',np.nan,inplace=True)
-df.replace('nan',np.nan,inplace=True)
-df.replace('N/A',np.nan,inplace=True)
+# NULL típusú cellák sorainak eldobása
+df.dropna(axis=0, inplace=True)
 
-# Mennyi NULL van a DataSet-ben
-print(df.isna().sum())
-
-print("\nAz adatok sorinak száma:" + " " + str(len(df.index)))
-
-# Férfi = 1 Nő = 0
-df["gender"] = df["gender"].replace({"Female": 0 ,"Male": 1, "Other": 2})
-
-# Valaha megházasodott-> igen = 1 nem = 0
-df["ever_married"] = df["ever_married"].replace({"Yes": 1, "No": 0})
-
-# Városban vagy vidéken él-> városban = 1 vidéken = 0
-df["Residence_type"] = df["Residence_type"].replace({"Urban": 1, "Rural": 0})
-
-# Dohányzási szokások számmá alakítás -> "soha": 0, "néha": 1, "dohányzik": 2, "ismeretlen": 3
-df["smoking_status"] = df["smoking_status"].replace({"never smoked": 0, "formerly smoked": 1, "smokes": 2, "Unknown": 3 })
-
-# Munkavégzés tipusa dinamikusan egy dictionary-be teszi a kulcs-érték párokat
-workType_list = df["work_type"].tolist()
-workType_map = {work_type: i for i, work_type in enumerate(df["work_type"].unique())}
-df["work_type"] = df["work_type"].replace(workType_map)
-workNumb_list = df["work_type"].tolist()
-my_dict = dict(zip(workType_list, workNumb_list))
-my_dict = {k: v for k, v in set(my_dict.items())}
-
-old_rowN=len(df.index)
-#avg_glucose_level -> Magyar értékké konvertálás
+# átlagos cukorszint konvertálása -> Magyar értékké konvertálás
 df.avg_glucose_level = [round(x / 18.016,2) for x in df.avg_glucose_level]
 
-#bmi -> Amerikai és Magyar számítási különbségek vannak, de az eredmény megegyezik [7 és 40 közötti BMI]
-df = df[(df['bmi']> 7) & (df['bmi'] < 40)]
+# Számok tartalmazó oszlopok kerekítése 0 tizedesjegyre
+numeric_columns = df.select_dtypes(include=[float, int]).columns
+df[numeric_columns] = df[(numeric_columns)].astype(int)
 
-#smoking -> Számomra hihetetlen, ha 10-12 évesen cigizik az illető és még nyilatkozik is róla
-df = df.loc[~((file['age'] < 10) & (df['smoking_status'] == 'smokes')) | ((df['age'] < 10) & (df['smoking_status'] == 'formerly smoked'))]
+# nemek konvertálása
+#print(f'\nAz egyéb nemet férfi nemre cserélem:{df.gender.unique()}')
+#df['gender']=df['gender'].replace({'Other': 'Male'})
+#df['gender'] = df['gender'].replace({'Female': 0 ,'Male': 1})
 
-# Adatok sorainak csökkenése
-print("\nTörölt adatok száma:" + " " + str(old_rowN - len(df.index)))
-print("Maradt még:" + " " + str(len(df.index)))
 
+# dohányzási szokás konvertálás
+df = df[df['smoking_status'] != 'Unknown']
+df.loc[df['smoking_status'] == 'smokes', 'smoking_status'] = 0
+df.loc[df['smoking_status'] == 'formerly smoked', 'smoking_status'] = 1
+df.loc[df['smoking_status'] == 'never smoked', 'smoking_status'] = 2
+
+# Felesleges oszlopok eldobása
+df =df.drop(['gender','age','work_type','id', 'ever_married','Residence_type'], axis=1)
+print(f'\nA maradt oszlopok nevei:\n{df.columns}')
+print(f'\nOszlop eldobások után maradandó dimenzió={df.shape}')
+
+print(f'\nFennmaradó üres cellák száma:\n{df.isnull().sum()}\n')
+
+
+# Sorok eldobása, ahol a 'BMI' oszlop értéke nem esik 7 és 40 közé
+df = df[(df['bmi'] >= 7) & (df['bmi'] <= 40)]
+
+
+#smoking -> Számomra hihetetlen, ha 14 év alatt cigizik az illető és még nyilatkozik is róla
+#df = df.loc[~((file['age'] < 14) & (df['smoking_status'] == 'smokes')) | ((df['age'] < 14) & (df['smoking_status'] == 'formerly smoked'))]
+
+# STROKE-osok kellenek a valós stroke-osok megmutatásához és betöltök hozzá hasonló mennyiségű egészséges embert
+df_old = df
+df_new = df[df['stroke'] == 1]
+num_have_stroke = len(df_new)
+df_new = pd.concat([df_new, df.iloc[num_have_stroke::23]])
+df = df_new
+
+print(f'\nAdatok szemléltetése:')
+print(df.head(5))
+
+print(f'\nOszlop statisztika szemléltetése:')
+print(f' {round(df.describe(),2)}')
 #------------------------------------------------------------------
 # TANÍTÁS
 #------------------------------------------------------------------
+print('\n\nTANÍTÁS EREDMÉNYEI:')
 # Feature-ökre és labelekre felbontás
 #X = df.iloc[:, :11] # 1.oszloptól 11.-ig és minden sor
 #Y = df.iloc[:, 11] # 12. oszlop(eredmény) minden sora
-X = df.drop(columns=['stroke'])
-Y= df['stroke'].values
-# X-> Feature Y-> Test
-X_train, x_test, Y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=73)
 
-# Teszt
-#print("A tanító adatok száma: " + str(X_train.shape))
-#print("A tanító adatok célváltozóinak száma: " + str(Y_train.shape))
-#print("\nA predikáló adatok száma: " + str(x_test.shape))
-#print("A predikáló célváltozóinak száma: " + str(y_test.shape))
+#-----------------------------Nagy dataFrame felosztás (teszthez)-----------------------------------
+XX = df_old.drop('stroke', axis=1)
+scaler = PowerTransformer()
+XX = scaler.fit_transform(XX)
+yy= df_old['stroke'].values
+XX_train, XX_test, yy_train, yy_test = train_test_split(XX, yy, test_size=0.4, random_state=42)
+#--------------------------------------------------------------------------------------------------
+
+X = df.drop('stroke', axis=1)
+scaler = PowerTransformer()
+X = scaler.fit_transform(X)
+y= df['stroke'].values
+# X-> Feature Y-> Test
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Nullák és egyesek megszámlálása a célváltozóban
+num_zeros = sum(y_test == 0)
+num_ones = sum(y_test == 1)
+# Eredmények kiírása
+print(f'\nA y_train változóban {num_zeros} darab nulla és {num_ones} darab egyes érték van.\n')
 
 #------------------------------------------------------------------
-# DÖNTÉSI FA
+# DÖNTÉSI FA (Kis adattal tanítás kis adattal tesztelés)
 #------------------------------------------------------------------
 
 # Döntési fa osztályozó objectum készítése
-dtc = DecisionTreeClassifier()
+dtc = DecisionTreeClassifier(max_leaf_nodes= 25 , min_samples_split=3, min_samples_leaf=10)
 
 # Döntési fa feltanítása tanító adatokkal
-dtc.fit(X_train, Y_train)
+dtc.fit(X_train, y_train)
 
-# Eredmények ellenőrzése
-accuracy = dtc.score(x_test, y_test)
+# Előrejelzés a teszt adatokon
+y_pred = dtc.predict(X_test)
 
-# Pontosság kiírása
-print("Accuracy:", accuracy)
+# Pontosság kiszámítása
+accuracy = accuracy_score(y_test, y_pred)
+recall = recall_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred)
+print("[Decision tree  -> kis modell kis teszt] Accuracy pontosság: ", accuracy)
+print("[Decision tree  -> kis modell kis teszt] Recall pontosság: ", recall)
+print("[Decision tree  -> kis modell nagy teszt] F1 pontosság: ", f1)
 
-#------------------------------------------------------------------
-# DÖNTÉSI FA
-#------------------------------------------------------------------
-
-# Random Forest készítése: 100db fa behelyezés
-rf = RandomForestClassifier(n_estimators=100, random_state=42)
-
-# Tanító adatokkal feltanítom a modelt
-rf.fit(X_train, Y_train)
-
-# Eredmények ellenőrzése
-accuracy = rf.score(x_test, y_test)
-
-# Pontosság kiírása
-print("Accuracy:", accuracy)
+# Konfúziós mátrix létrehozása
+cm = confusion_matrix(y_test, y_pred)
+# Konfúziós mátrix megjelenítése
+plt.figure(figsize=(10, 8))
+sns.heatmap(cm, annot=True, fmt="d", cmap="YlOrBr", cbar=False)
+plt.xlabel('Előrejelzett osztály')
+plt.ylabel('Valós osztály')
+plt.show()
 
 #------------------------------------------------------------------
-# KNN
+# DÖNTÉSI FA (Kis adattal tanítás nagy adattal tesztelés)
+#------------------------------------------------------------------
+
+# Döntési fa osztályozó objectum készítése
+dtc = DecisionTreeClassifier(max_leaf_nodes= 25 , min_samples_split=3, min_samples_leaf=10)
+
+# Döntési fa feltanítása tanító adatokkal
+dtc.fit(X_train, y_train)
+
+# Előrejelzés a teszt adatokon
+yy_pred = dtc.predict(XX_test)
+
+# Pontosság kiszámítása
+accuracy = accuracy_score(yy_test, yy_pred)
+recall = recall_score(yy_test, yy_pred)
+f1 = f1_score(yy_test, yy_pred)
+print("[Decision tree  -> kis modell nagy teszt] Accuracy pontosság: ", accuracy)
+print("[Decision tree  -> kis modell nagy teszt] Recall pontosság: ", recall)
+print("[Decision tree  -> kis modell nagy teszt] F1 pontosság: ", f1)
+
+# Konfúziós mátrix létrehozása
+cm = confusion_matrix(yy_test, yy_pred)
+# Konfúziós mátrix megjelenítése
+plt.figure(figsize=(10, 8))
+sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", cbar=False)
+plt.xlabel('Előrejelzett osztály')
+plt.ylabel('Valós osztály')
+plt.show()
+
+#------------------------------------------------------------------
+# DÖNTÉSI FA (Nagy adattal tanítás nagy adattal tesztelés)
+#------------------------------------------------------------------
+
+# Döntési fa osztályozó objectum készítése
+dtc = DecisionTreeClassifier(max_leaf_nodes= 25 , min_samples_split=3, min_samples_leaf=10)
+
+# Döntési fa feltanítása tanító adatokkal
+dtc.fit(XX_train, yy_train)
+
+# Előrejelzés a teszt adatokon
+yy_pred = dtc.predict(XX_test)
+
+# Pontosság kiszámítása
+accuracy = accuracy_score(yy_test, yy_pred)
+recall = recall_score(yy_test, yy_pred)
+f1 = f1_score(yy_test, yy_pred)
+print("[Decision tree  -> nagy modell nagy teszt] Accuracy pontosság: ", accuracy)
+print("[Decision tree  -> nagy modell nagy teszt] Recall pontosság: ", recall)
+print("[Decision tree  -> nagy modell nagy teszt] F1 pontosság: ", f1)
+
+# Konfúziós mátrix létrehozása
+cm = confusion_matrix(yy_test, yy_pred)
+# Konfúziós mátrix megjelenítése
+plt.figure(figsize=(10, 8))
+sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", cbar=False)
+plt.xlabel('Előrejelzett osztály')
+plt.ylabel('Valós osztály')
+plt.show()
+#------------------------------------------------------------------
+# RANDOM FOREST (Kis adattal tanítás kis adattal tesztelés)
+#------------------------------------------------------------------
+# Random Forest inicializálása
+rf = RandomForestClassifier(n_estimators=100, random_state=40, max_depth=2, min_samples_split=30, min_samples_leaf=15)
+
+# Tanítás
+rf.fit(X_train, y_train)
+
+# Előrejelzés a teszt adatokon
+y_pred = rf.predict(X_test)
+
+# Pontosság kiszámítása
+accuracy = accuracy_score(y_test, y_pred)
+recall = recall_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred)
+print("[Random forest] Accuracy pontosság: ", accuracy)
+print("[Random forest] Recall pontosság: ", recall)
+print("[Random forest] F1 pontosság: ", f1)
+
+# Konfúziós mátrix létrehozása
+cm = confusion_matrix(y_test, y_pred)
+# Konfúziós mátrix megjelenítése
+plt.figure(figsize=(10, 8))
+sns.heatmap(cm, annot=True, fmt="d", cmap="YlOrBr", cbar=False)
+plt.xlabel('Előrejelzett osztály')
+plt.ylabel('Valós osztály')
+plt.show()
+
+#------------------------------------------------------------------
+# RANDOM FOREST (Kis adattal tanítás nagy adattal tesztelés)
+#------------------------------------------------------------------
+# Random Forest inicializálása
+rf = RandomForestClassifier(n_estimators=100, random_state=40, max_depth=2, min_samples_split=30, min_samples_leaf=15)
+
+# Tanítás
+rf.fit(X_train, y_train)
+
+# Előrejelzés a teszt adatokon
+yy_pred = rf.predict(XX_test)
+
+# Pontosság kiszámítása
+accuracy = accuracy_score(yy_test, yy_pred)
+recall = recall_score(yy_test, yy_pred)
+f1 = f1_score(yy_test, yy_pred)
+print("[Random forest -> kis modell nagy teszt] Accuracy pontosság: ", accuracy)
+print("[Random forest -> kis modell nagy teszt] Recall pontosság: ", recall)
+print("[Random forest -> kis modell nagy teszt] F1 pontosság: ", f1)
+
+# Konfúziós mátrix létrehozása
+cm = confusion_matrix(yy_test, yy_pred)
+# Konfúziós mátrix megjelenítése
+plt.figure(figsize=(10, 8))
+sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", cbar=False)
+plt.xlabel('Előrejelzett osztály')
+plt.ylabel('Valós osztály')
+plt.show()
+
+#------------------------------------------------------------------
+# RANDOM FOREST (Nagy adattal tanítás nagy adattal tesztelés)
+#------------------------------------------------------------------
+# Random Forest inicializálása
+rf = RandomForestClassifier(n_estimators=100, random_state=40, max_depth=2, min_samples_split=30, min_samples_leaf=15)
+
+# Tanítás
+rf.fit(XX_train, yy_train)
+
+# Előrejelzés a teszt adatokon
+yy_pred = rf.predict(XX_test)
+
+# Pontosság kiszámítása
+accuracy = accuracy_score(yy_test, yy_pred)
+recall = recall_score(yy_test, yy_pred)
+f1 = f1_score(yy_test, yy_pred)
+print("[Random forest -> nagy modell nagy teszt] Accuracy pontosság: ", accuracy)
+print("[Random forest -> nagy modell nagy teszt] Recall pontosság: ", recall)
+print("[Random forest -> nagy modell nagy teszt] F1 pontosság: ", f1)
+
+# Konfúziós mátrix létrehozása
+cm = confusion_matrix(yy_test, yy_pred)
+# Konfúziós mátrix megjelenítése
+plt.figure(figsize=(10, 8))
+sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", cbar=False)
+plt.xlabel('Előrejelzett osztály')
+plt.ylabel('Valós osztály')
+plt.show()
+
+#------------------------------------------------------------------
+# KNN (Kis adattal tanítás kis adattal tesztelés)
 #------------------------------------------------------------------
 
 # KNN osztályozó készítése 5 megengedett szomszéddal
-knn = KNeighborsClassifier(n_neighbors=5)
+knn = KNeighborsClassifier(n_neighbors=13)
 
 # Tanító adatokkal feltanítom a modelt
-knn.fit(X_train, Y_train)
+knn.fit(X_train, y_train)
+# Előrejelzés a teszt adatokon
+y_pred = knn.predict(X_test)
 
-# Eredmények ellenőrzése
-accuracy = knn.score(x_test, y_test)
+# Pontosság kiszámítása
+accuracy = accuracy_score(y_test, y_pred)
+recall = recall_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred)
+print("[KNN -> kis modell kis teszt] Accuracy pontosság: ", accuracy)
+print("[KNN -> kis modell kis teszt] Recall pontosság: ", recall)
+print("[KNN -> kis modell kis teszt] F1 pontosság: ", f1)
 
-# Pontosság kiírása
-print("Accuracy:", accuracy)
-
+# Konfúziós mátrix létrehozása
+cm = confusion_matrix(y_test, y_pred)
+# Konfúziós mátrix megjelenítése
+plt.figure(figsize=(10, 8))
+sns.heatmap(cm, annot=True, fmt="d", cmap="YlOrBr", cbar=False)
+plt.xlabel('Előrejelzett osztály')
+plt.ylabel('Valós osztály')
+plt.show()
 
 #------------------------------------------------------------------
-# SVM
+# KNN (Kis adattal tanítás nagy adattal tesztelés)
 #------------------------------------------------------------------
+
+# KNN osztályozó készítése 5 megengedett szomszéddal
+knn = KNeighborsClassifier(n_neighbors=13)
+
+# Tanító adatokkal feltanítom a modelt
+knn.fit(X_train, y_train)
+# Előrejelzés a teszt adatokon
+yy_pred = knn.predict(XX_test)
+
+# Pontosság kiszámítása
+accuracy = accuracy_score(yy_test, yy_pred)
+recall = recall_score(yy_test, yy_pred)
+f1 = f1_score(yy_test, yy_pred)
+print("[KNN -> kis modell nagy teszt] Accuracy pontosság: ", accuracy)
+print("[KNN -> kis modell nagy teszt] Recall pontosság: ", recall)
+print("[KNN -> kis modell nagy teszt] F1 pontosság: ", f1)
+
+# Konfúziós mátrix létrehozása
+cm = confusion_matrix(yy_test, yy_pred)
+# Konfúziós mátrix megjelenítése
+plt.figure(figsize=(10, 8))
+sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", cbar=False)
+plt.xlabel('Előrejelzett osztály')
+plt.ylabel('Valós osztály')
+plt.show()
+
+#------------------------------------------------------------------
+# KNN (Nagy adattal tanítás nagy adattal tesztelés)
+#------------------------------------------------------------------
+
+# KNN osztályozó készítése 5 megengedett szomszéddal
+knn = KNeighborsClassifier(n_neighbors=13)
+
+# Tanító adatokkal feltanítom a modelt
+knn.fit(XX_train, yy_train)
+# Előrejelzés a teszt adatokon
+yy_pred = knn.predict(XX_test)
+
+# Pontosság kiszámítása
+accuracy = accuracy_score(yy_test, yy_pred)
+recall = recall_score(yy_test, yy_pred)
+f1 = f1_score(yy_test, yy_pred)
+print("[KNN -> nagy modell nagy teszt] Accuracy pontosság: ", accuracy)
+print("[KNN -> nagy modell nagy teszt] Recall pontosság: ", recall)
+print("[KNN -> nagy modell nagy teszt] F1 pontosság: ", f1)
+
+# Konfúziós mátrix létrehozása
+cm = confusion_matrix(yy_test, yy_pred)
+# Konfúziós mátrix megjelenítése
+plt.figure(figsize=(10, 8))
+sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", cbar=False)
+plt.xlabel('Előrejelzett osztály')
+plt.ylabel('Valós osztály')
+plt.show()
+
+#------------------------------------------------------------------
+# SVM (Kis adattal tanítás kis adattal tesztelés)
+#------------------------------------------------------------------
+
 
 # SVM modell illesztése
 # A modell lineáris határvonalakkal választja el az osztályokat
@@ -176,10 +402,84 @@ print("Accuracy:", accuracy)
 svm = SVC(kernel='linear', C=1.0)
 
 # Tanító adatokkal feltanítom a modelt
-svm.fit(X_train, Y_train)
+svm.fit(X_train, y_train)
+y_pred = svm.predict(X_test)
 
-# Eredmények ellenőrzése
-accuracy = accuracy_score(y_test, svm.predict(x_test))
+# Pontosság kiszámítása
+accuracy = accuracy_score(y_test, y_pred)
+recall = recall_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred)
+print("[SVM -> kis modell kis teszt] Accuracy pontosság: ", accuracy)
+print("[SVM -> kis modell kis teszt] Recall pontosság: ", recall)
+print("[SVM -> kis modell kis teszt] F1 pontosság: ", f1)
 
-# Pontosság kiírása
-print(f"Model accuracy: {accuracy}")
+# Konfúziós mátrix létrehozása
+cm = confusion_matrix(y_test, y_pred)
+# Konfúziós mátrix megjelenítése
+plt.figure(figsize=(10, 8))
+sns.heatmap(cm, annot=True, fmt="d", cmap="YlOrBr", cbar=False)
+plt.xlabel('Előrejelzett osztály')
+plt.ylabel('Valós osztály')
+plt.show()
+
+#------------------------------------------------------------------
+# SVM (Kis adattal tanítás nagy adattal tesztelés)
+#------------------------------------------------------------------
+
+
+# SVM modell illesztése
+# A modell lineáris határvonalakkal választja el az osztályokat
+# A C paraméter a szabályozási paraméter, amely befolyásolja az SVM modell kompromisszumát a túltanulás és az alultanulás között. Minél nagyobb a C, annál kevésbé tolerálja az SVM a hibákat a döntési határon.
+svm = SVC(kernel='linear', C=1.0)
+
+# Tanító adatokkal feltanítom a modelt
+svm.fit(X_train, y_train)
+yy_pred = svm.predict(XX_test)
+
+# Pontosság kiszámítása
+accuracy = accuracy_score(yy_test, yy_pred)
+recall = recall_score(yy_test, yy_pred)
+f1 = f1_score(yy_test, yy_pred)
+print("[SVM -> kis modell nagy teszt] Accuracy pontosság: ", accuracy)
+print("[SVM -> kis modell nagy teszt] Recall pontosság: ", recall)
+print("[SVM -> kis modell nagy teszt] F1 pontosság: ", f1)
+
+# Konfúziós mátrix létrehozása
+cm = confusion_matrix(yy_test, yy_pred)
+# Konfúziós mátrix megjelenítése
+plt.figure(figsize=(10, 8))
+sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", cbar=False)
+plt.xlabel('Előrejelzett osztály')
+plt.ylabel('Valós osztály')
+plt.show()
+
+#------------------------------------------------------------------
+# SVM (Nagy adattal tanítás nagy adattal tesztelés)
+#------------------------------------------------------------------
+
+
+# SVM modell illesztése
+# A modell lineáris határvonalakkal választja el az osztályokat
+# A C paraméter a szabályozási paraméter, amely befolyásolja az SVM modell kompromisszumát a túltanulás és az alultanulás között. Minél nagyobb a C, annál kevésbé tolerálja az SVM a hibákat a döntési határon.
+svm = SVC(kernel='linear', C=1.0)
+
+# Tanító adatokkal feltanítom a modelt
+svm.fit(XX_train, yy_train)
+yy_pred = svm.predict(XX_test)
+
+# Pontosság kiszámítása
+accuracy = accuracy_score(yy_test, yy_pred)
+recall = recall_score(yy_test, yy_pred)
+f1 = f1_score(yy_test, yy_pred)
+print("[SVM -> nagy modell nagy teszt] Accuracy pontosság: ", accuracy)
+print("[SVM -> nagy modell nagy teszt] Recall pontosság: ", recall)
+print("[SVM-> nagy modell nagy teszt] F1 pontosság: ", f1)
+
+# Konfúziós mátrix létrehozása
+cm = confusion_matrix(yy_test, yy_pred)
+# Konfúziós mátrix megjelenítése
+plt.figure(figsize=(10, 8))
+sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", cbar=False)
+plt.xlabel('Előrejelzett osztály')
+plt.ylabel('Valós osztály')
+plt.show()
