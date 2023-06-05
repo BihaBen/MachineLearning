@@ -39,7 +39,7 @@ def main():
         # Confusion matrix megjelenítése
         fig, ax = plot_confusion_matrix(conf_mat=cm)
         st.pyplot(fig)
-        st.write("A fig tartalma:", fig)
+        st.write("A fig tartalma:", ax)
         
         #st.write('RandomForest pontossága: {}%'.format(round((accuracy_dtc*100),2)))
         #st.write('RandomForest pontossága: {}%'.format(round((accuracy_dtc*100),2)))
