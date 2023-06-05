@@ -29,15 +29,31 @@ def main():
     button_pressed1 = st.sidebar.button('Konfuzios matrix megjelenítése')
     button_pressed2 = st.sidebar.button('Modellek összevetése')
     st.title("STROKE ELŐREJELZŐ APP")
-
+    
     if button_pressed1:
-        # Tesztadatok előrejelzése
-        y_pred = rf.predict(X_test)  # Első oszlopban a pozitív osztály előrejelzéseinek valószínűségeit tároljuk
+        y_pred_rf = dtc.predict(X_test)
         # Konfúziós mátrix létrehozása
-        cm = confusion_matrix(y_test, y_pred)
+        cm = confusion_matrix(X_test, y_pred)
+
+        # Streamlit alkalmazás
+        st.title('Konfúziós mátrix')
+        st.write('Ez egy példa a konfúziós mátrix megjelenítésére a Streamlit segítségével.')
+
         # Konfúziós mátrix megjelenítése
-        fig, ax = plot_confusion_matrix(conf_mat=cm)
-        st.pyplot(fig)
+        df_cm = pd.DataFrame(cm, index=['Valós Negatív', 'Valós Pozitív'], columns=['Prediktált Negatív', 'Prediktált Pozitív'])
+        plt.figure(figsize=(6, 4))
+        sns.heatmap(df_cm, annot=True, cmap='Blues', fmt='g')
+        st.pyplot()
+
+        # Pontosság, érzékenység és specificitás kiszámítása
+        tn, fp, fn, tp = cm.ravel()
+        accuracy = (tp + tn) / (tp + tn + fp + fn)
+        sensitivity = tp / (tp + fn)
+        specificity = tn / (tn + fp)
+
+        st.write('Pontosság:', accuracy)
+        st.write('Érzékenység:', sensitivity)
+        st.write('Specificitás:', specificity)
         
     if button_pressed2:
         with st.sidebar:
