@@ -44,7 +44,7 @@ def main():
         
         st.pyplot(fig)
         # Kép importálása és megjelenítése
-        image = Image.open("https://github.com/BihaBen/MachineLearning/blob/main/metrics.png")
+        image = url("https://github.com/BihaBen/MachineLearning/blob/main/metrics.png")
         st.image(image)
         
     if button_pressed2:
