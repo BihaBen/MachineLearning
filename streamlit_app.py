@@ -40,7 +40,7 @@ def main():
         fig, ax = plot_confusion_matrix(conf_mat=cm)
         st.pyplot(fig)
         
-        recall = recall_score(y_test, y_predict_rf_matrix, pos_label=1)
+        recall = recall_score(y_test, y_predict_rf_matrix)
         #precision = precision_score(y_test, y_predict_rf_matrix, pos_label=1)
         #f1 = f1_score(y_test, y_predict_rf_matrix, pos_label=1)
         accuracy = rf1.score(y_test, y_predict_rf_matrix)
