@@ -43,6 +43,9 @@ def main():
         ax.set(title='Random forest konfutios matrix szemleltetes:', ylabel='Valós osztály', xlabel='Előrejelzett osztály')
         
         st.pyplot(fig)
+        # Kép importálása és megjelenítése
+        image = Image.open("metrics.jpg")
+        st.image(image)
         
     if button_pressed2:
         with st.sidebar:
