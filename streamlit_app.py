@@ -30,7 +30,7 @@ def add_bg_from_url():
 def main():
     button_pressed1 = st.sidebar.button('Konfuzios matrix megjelenítése')
     button_pressed2 = st.sidebar.button('Modellek összevetése')
-    st.markdown('<style>h1 {color: white;}</style>', unsafe_allow_html=True)
+    
     st.title('<h1 style="color: white; text-align: center;">STROKE ELŐREJELZŐ APP:</h1>', unsafe_allow_html=True)
     
     if button_pressed1:
