@@ -5,6 +5,7 @@ from strokePred import X_test, y_test
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, classification_report
+from mlxtend.plotting import plot_confusion_matrix
 
 #Metrikák
 from sklearn.metrics import accuracy_score
@@ -31,29 +32,20 @@ def main():
     st.title("STROKE ELŐREJELZŐ APP")
     
     if button_pressed1:
-        y_pred_rf = dtc.predict(X_test)
-        # Konfúziós mátrix létrehozása
-        cm = confusion_matrix(X_test, y_pred)
+         cm = confusion_matrix(y_test, rf.predict(X_test))
 
-        # Streamlit alkalmazás
-        st.title('Konfúziós mátrix')
-        st.write('Ez egy példa a konfúziós mátrix megjelenítésére a Streamlit segítségével.')
+        # Confusion matrix megjelenítése
+        fig, ax = plot_confusion_matrix(conf_mat=cm)
+        st.pyplot(fig)
 
-        # Konfúziós mátrix megjelenítése
-        df_cm = pd.DataFrame(cm, index=['Valós Negatív', 'Valós Pozitív'], columns=['Prediktált Negatív', 'Prediktált Pozitív'])
-        plt.figure(figsize=(6, 4))
-        sns.heatmap(df_cm, annot=True, cmap='Blues', fmt='g')
-        st.pyplot()
-
-        # Pontosság, érzékenység és specificitás kiszámítása
-        tn, fp, fn, tp = cm.ravel()
-        accuracy = (tp + tn) / (tp + tn + fp + fn)
-        sensitivity = tp / (tp + fn)
-        specificity = tn / (tn + fp)
-
-        st.write('Pontosság:', accuracy)
-        st.write('Érzékenység:', sensitivity)
-        st.write('Specificitás:', specificity)
+        recall = recall_score(y_test, model.predict(X_test), pos_label=1)
+        precision = precision_score(y_test, model.predict(X_test), pos_label=1)
+        f1 = f1_score(y_test, model.predict(X_test), pos_label=1)
+        accuracy = model.score(X_test, y_test)
+        st.write('RandomForest accuracy:', accuracy)
+        st.write('RandomForest recall:', recall)
+        st.write('RandomForest precision:', precision)
+        st.write('RandomForest F1 score:', f1)
         
     if button_pressed2:
         with st.sidebar:
